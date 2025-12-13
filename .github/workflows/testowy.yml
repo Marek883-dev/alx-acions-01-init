@@ -1,0 +1,21 @@
+name: Test workflow
+
+on:
+  push:          # uruchom na każdy push
+    branches:
+      - main     # albo inna Twoja gałąź
+  workflow_dispatch:  # pozwala też odpalić ręcznie z GUI
+
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Print info
+        run: |
+          echo "Hello from GitHub Actions!"
+          echo "Branch: $GITHUB_REF"
+          echo "Commit: $GITHUB_SHA"
