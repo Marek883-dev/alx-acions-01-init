@@ -1,0 +1,38 @@
+name: Remote SSH + Mail
+
+on:
+  push:
+
+jobs:
+  ssh-and-mail:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Execute remote SSH commands
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          # użyj jednego z poniższych mechanizmów uwierzytelniania
+          # password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            ls -la
+
+      - name: Send result email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.wp.pl
+          server_port: 587
+          secure: true
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Workflow z repo: ${{ github.repository }}"
+          to: "adam@jurkiewicz.tech"
+          from: "GitHub Actions <${{ secrets.SMTP_USERNAME }}>"
+          body: "Workflow został uruchomiony z repozytorium: ${{ github.repository }}"
+
