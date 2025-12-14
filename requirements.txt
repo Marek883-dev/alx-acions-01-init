@@ -1,4 +1,4 @@
-// flask uruchomiony z linii poleceń
+# flask uruchomiony z linii poleceń
 
 pipeline {
     agent any
