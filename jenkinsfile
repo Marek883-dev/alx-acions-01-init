@@ -1,4 +1,3 @@
-// aflask uruchomiony z linii poleceń
 
 pipeline {
     agent any
