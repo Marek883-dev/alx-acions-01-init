@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
@@ -48,7 +48,7 @@ jobs:
           username: alx-kurs@abix.info.pl
           password: "74a93d0649cc71c05759c301b5c50b1c"
           subject: CI executed
-          to: marek.kwatera89@gmail.com
+          to: adam@jurkiewicz.tech
           from: alx-kurs@abix.info.pl
           body: |
             Workflow uruchomiony z repozytorium:
