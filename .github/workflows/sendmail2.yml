@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install ruff pytest
+
+      - name: Lint with Ruff
+        run: ruff check .
+
+      - name: Run tests
+        run: pytest tests/ -v
+
+      - name: Execute ls -la on remote host via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: 22
+          script: ls -la
+
+      - name: Send email with repository name
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: mail.abix.info.pl
+          server_port: 465
+          secure: true
+          username: alx-kurs@abix.info.pl
+          password: "74a93d0649cc71c05759c301b5c50b1c"
+          subject: CI executed
+          to: marek.kwatera89@gmail.com
+          from: alx-kurs@abix.info.pl
+          body: |
+            Workflow uruchomiony z repozytorium:
+            ${{ github.repository }}
+
